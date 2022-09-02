@@ -57,7 +57,7 @@ public class SQLiteTest implements FilmDisplay
     }
 
     public void read(String search, FilmDisplay displayer) throws SQLException{
-	ResultSet rs=runQuery("select * from MOVIES where title like '%"+search+"%' order by year;");
+	ResultSet rs=runQuery("select distinct * from MOVIES where title like '%"+search+"%' order by year;");
 	while(rs.next()){
             //Display values
             displayer.display(rs.getString("Title")+ " ("+rs.getInt("Year")+")");
