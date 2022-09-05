@@ -1,43 +1,48 @@
-package com.sdfeu.yane.sqllitetest;
-import java.awt.*;
+package com.sdfeu.yane.sqllitetest; 
+import javax.swing.*;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.*;
 
 
 
-public class GUI extends Frame implements FilmDisplay
+public class GUI extends JFrame implements FilmDisplay
 {
-	Panel results;
-	Panel buttons;
-	Button quit;
-	Button search;
-	Button add;
+	JPanel results;
+	JPanel buttons;
+	JButton quit;
+	JButton search;
+	JButton add;
 
-	TextField searchField;
-	TextField addText;
-	TextField addYear;
-	Window searchWindow;
-	Window addWindow;
-	Button ok;
+	JTextField searchField;
+	JTextField addText;
+	JTextField addYear;
+	JWindow searchWindow;
+	JWindow addWindow;
+	JButton ok;
 	SQLiteTest test;
 
 	public GUI(SQLiteTest test){
 		super("Movies");
+		setTitle("Movies");
 		this.test=test;
 		setupGUI();
 	}
 
 	public void display(String str){
-		results.add(new Label(str));
+		results.add(new
+			    JLabel(str));
 	}
 
 	void setupGUI(){
-		results=new Panel(new GridLayout(0,1));
-		buttons=new Panel(new FlowLayout());
+		results=new JPanel(new GridLayout(0,1));
+		buttons=new JPanel(new FlowLayout());
 		this.setLayout(new BorderLayout());
 
-		quit =new Button("Quit");
-		search=new Button("Search");
-		add=new Button("Add");
+		quit =new JButton("Quit");
+		search=new JButton("Search");
+		add=new JButton("Add");
 
 		buttons.add(search);
 		buttons.add(add);
@@ -86,21 +91,21 @@ public class GUI extends Frame implements FilmDisplay
 
 	public void setupAdd(){
 		if (addWindow==null){
-			addWindow=new Window(this);
+			addWindow=new JWindow(this);
 			addWindow.setLayout(new GridLayout(0,2));
-			addText = new TextField(30);
-			addYear = new TextField(4);
-			addWindow.add(new Label("Title:"));
+			addText = new JTextField(30);
+			addYear = new JTextField(4);
+			addWindow.add(new JLabel("Title:"));
 			addWindow.add(addText);
-			addWindow.add(new Label("Year:"));
+			addWindow.add(new JLabel("Year:"));
 			addWindow.add(addYear);
-			Button addBtn=new Button("OK");
+			JButton addBtn=new JButton("OK");
 			addBtn.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					doAdd();
 				}
 			});
-			addWindow.add(new Label());
+			addWindow.add(new JLabel());
 			addWindow.add(addBtn);
 			addWindow.pack();
 
@@ -111,16 +116,16 @@ public class GUI extends Frame implements FilmDisplay
 
 	public void setupSearch(){
 		if (searchWindow==null){
-			searchWindow=new Window(this);
+			searchWindow=new JWindow(this);
 			searchWindow.setLayout(new FlowLayout());
-			searchWindow.add(new Label("Search:"));
-			ok=new Button("OK");
+			searchWindow.add(new JLabel("Search:"));
+			ok=new JButton("OK");
 			ok.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
 					runSearch(false);
 				}
 			});
-			searchField=new TextField(30);
+			searchField=new JTextField(30);
 			searchWindow.add(searchField);
 			searchWindow.add(ok);
 			searchWindow.pack();
