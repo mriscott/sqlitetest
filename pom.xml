@@ -28,7 +28,22 @@
 	</configuration>
 
       </plugin>
-
+<!--- this one copies dependent jars to target/lib -->
+     <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+      </plugin>
+<!--- this one makes a far jar -->
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-assembly-plugin</artifactId>
