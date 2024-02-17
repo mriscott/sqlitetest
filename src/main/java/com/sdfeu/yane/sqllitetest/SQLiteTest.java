@@ -1,7 +1,7 @@
 package com.sdfeu.yane.sqllitetest;
 import java.sql.*;
 
-public class SQLiteTest implements FilmDisplay
+public class SQLiteTest 
 {
     static boolean DEBUG=false;
     Connection connection;
@@ -18,10 +18,6 @@ public class SQLiteTest implements FilmDisplay
 			me.read("");
 			me.cleanup();
 			System.exit(0);	
-		}
-		if(args[0].equals("GUI")){
-			new GUI(me);
-			return;
 		}
 		if(args[0].equals("SEARCH") && args.length==2){
 			me.read(args[1]);
@@ -52,15 +48,12 @@ public class SQLiteTest implements FilmDisplay
 	}
     }
 
-    public void read(String search) throws SQLException{
-	    read(search,this);
-    }
 
-    public void read(String search, FilmDisplay displayer) throws SQLException{
+    public void read(String search) throws SQLException{
 	ResultSet rs=runQuery("select distinct * from MOVIES where title like '%"+search+"%' order by year;");
 	while(rs.next()){
             //Display values
-            displayer.display(rs.getString("Title")+ " ("+rs.getInt("Year")+")");
+            System.out.println((rs.getString("Title")+ " ("+rs.getInt("Year")+")"));
          }
 	rs.close();
     }
@@ -134,12 +127,10 @@ public class SQLiteTest implements FilmDisplay
     }
 
 
-	
-
     Connection getConn() throws SQLException{  
 	if (connection!=null) return connection;
 	// db parameters  
-	String url = "jdbc:sqlite:/tmp/movies.db";  
+	String url = "jdbc:sqlite:movies.db";  
 	// create a connection to the database  
 	connection = DriverManager.getConnection(url);  
         
