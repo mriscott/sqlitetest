@@ -20,12 +20,12 @@ public class SQLiteTest
 			me.cleanup();
 			System.exit(0);	
 		}
-		if(args[0].equals("SEARCH") && args.length==2){
+		if(args[0].equalsIgnoreCase("SEARCH") && args.length==2){
 			me.read(args[1]);
 			me.cleanup();
 			System.exit(0);	
 		}
-		if(args[0].equals("ADD") && args.length==3){
+		if(args[0].equalsIgnoreCase("ADD") && args.length==3){
 			try{
 				me.addMovie(args[1],args[2]);
 			}catch(NumberFormatException e){
