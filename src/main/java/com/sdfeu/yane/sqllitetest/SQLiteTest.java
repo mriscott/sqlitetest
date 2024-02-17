@@ -14,8 +14,8 @@ public class SQLiteTest
     public static void main(String [] args){
 	SQLiteTest me = new SQLiteTest();
 	try{
+		me.setup();
 		if(args.length==0){
-			me.setup();
 			me.read("");
 			me.cleanup();
 			System.exit(0);	
@@ -34,11 +34,17 @@ public class SQLiteTest
 			me.cleanup();
 			System.exit(0);	
 		}
+		if(args[0].equalsIgnoreCase("DEL") && args.length==2){
+			me.deleteMovie(args[1]);
+			me.cleanup();
+			System.exit(0);	
+		}
 		System.out.println("Bad args");
 		System.out.println("Usage:  ");
 		System.out.println(" - No args         ...  list all films  ");
 		System.out.println(" - SEARCH xxx      ...  list films matching xxx ");
 		System.out.println(" - ADD title year  ...  add film ");
+		System.out.println(" - DEL xxx         ...  delete films matching xxx ");
 	} catch (SQLException e) {
 	    e.printStackTrace();
             System.out.println(e.getMessage());  
@@ -53,6 +59,10 @@ public class SQLiteTest
 	}
     }
 
+    // delete movis where title amtches string
+    public void deleteMovie(String search) throws SQLException{
+	runSql("delete from MOVIES where title like '%"+search+"%';");
+    }
     // displays movis where title amtches string
     public void read(String search) throws SQLException{
 	ResultSet rs=runQuery("select distinct * from MOVIES where title like '%"+search+"%' order by year;");
@@ -87,11 +97,17 @@ public class SQLiteTest
 	debug("Tables created");
     }
 
-    // add a movie
-    void addMovie(String title, int year) throws SQLException{
-	ResultSet rs=runQuery("select count(*) from MOVIES where title = '"+title+"' and year="+year+";");
+    int runCountQuery(String query) throws SQLException{
+	ResultSet rs=runQuery(query);
 	rs.next();
 	int count = rs.getInt(1);
+        rs.close();
+        return count;
+    }
+
+    // add a movie
+    void addMovie(String title, int year) throws SQLException{
+	int count=runCountQuery("select count(*) from MOVIES where title = '"+title+"' and year="+year+";");
 	if (count==1){
 		// already there
 		return;
@@ -110,6 +126,9 @@ public class SQLiteTest
 
     // so the DB doesn't start empty
     void addData() throws SQLException{
+            // first check movie isn't already populated
+	    int count=runCountQuery("select count(*) from MOVIES;");
+            if (count!=0) return; 
 	    addMovie("Citizen Kane",1941);
 	    addMovie("The Matrix",1999);
 	    addMovie("Bee Movie",2007);
