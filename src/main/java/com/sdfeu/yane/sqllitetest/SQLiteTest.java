@@ -6,6 +6,7 @@ public class SQLiteTest
     static boolean DEBUG=false;
     Connection connection;
 
+    // could be overriden if we wanted a GUI
     public void display(String str){
 	    System.out.println(str);
     }
@@ -34,6 +35,10 @@ public class SQLiteTest
 			System.exit(0);	
 		}
 		System.out.println("Bad args");
+		System.out.println("Usage:  ");
+		System.out.println(" - No args         ...  list all films  ");
+		System.out.println(" - SEARCH xxx      ...  list films matching xxx ");
+		System.out.println(" - ADD title year  ...  add film ");
 	} catch (SQLException e) {
 	    e.printStackTrace();
             System.out.println(e.getMessage());  
@@ -48,7 +53,7 @@ public class SQLiteTest
 	}
     }
 
-
+    // displays movis where title amtches string
     public void read(String search) throws SQLException{
 	ResultSet rs=runQuery("select distinct * from MOVIES where title like '%"+search+"%' order by year;");
 	while(rs.next()){
@@ -63,7 +68,8 @@ public class SQLiteTest
 	addData();
     }
 
-
+   
+   // close connection at end - not necessary if program ends cleanly
    public  void cleanup() throws SQLException{
 	if (connection!=null) connection.close();
 	connection=null;
@@ -81,6 +87,7 @@ public class SQLiteTest
 	debug("Tables created");
     }
 
+    // add a movie
     void addMovie(String title, int year) throws SQLException{
 	ResultSet rs=runQuery("select count(*) from MOVIES where title = '"+title+"' and year="+year+";");
 	rs.next();
@@ -96,10 +103,12 @@ public class SQLiteTest
 	runSql("Insert into movies values('"+title+"',"+year+");");
     }
 
+    // takes two strings for ease
     void addMovie(String title, String year) throws SQLException,NumberFormatException{
 	   addMovie(title,Integer.parseInt(year)); 
     }
 
+    // so the DB doesn't start empty
     void addData() throws SQLException{
 	    addMovie("Citizen Kane",1941);
 	    addMovie("The Matrix",1999);
@@ -120,6 +129,7 @@ public class SQLiteTest
 	debug(updates);
     }
 
+    // Runs an SQL Command expecting output (i.e. a select)
     ResultSet runQuery(String sql) throws SQLException
     {
 	Statement stmt = getConn().createStatement();
