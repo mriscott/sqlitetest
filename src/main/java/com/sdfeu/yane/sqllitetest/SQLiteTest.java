@@ -74,8 +74,8 @@ public class SQLiteTest
     void createTables() throws SQLException{        
         // SQL statement for creating a new table
 	String sql = "CREATE TABLE IF NOT EXISTS movies (\n"
-                + "	title text NOT NULL,\n"
-                + "	year real\n"
+                + "	title varchar2(50) NOT NULL,\n"
+                + "	year integer\n"
                 + ");";
 	runSql(sql);
 	debug("Tables created");
@@ -107,7 +107,9 @@ public class SQLiteTest
 	    addMovie("The Dark Knight",2008);
 	    addMovie("The Godfather",1972);
     }
+
     
+    // Runs an SQL Command not expecting output i.e. an update/delete
     void runSql(String sql) throws SQLException
     {
 	Statement stmt = getConn().createStatement();
