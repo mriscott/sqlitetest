@@ -1,5 +1,8 @@
 package com.sdfeu.yane.sqllitetest;
 import java.sql.*;
+import java.io.*;
+import javax.json.*;
+import javax.json.stream.*;
 
 public class SQLiteTest 
 {
@@ -15,6 +18,7 @@ public class SQLiteTest
 	SQLiteTest me = new SQLiteTest();
 	try{
 		me.setup();
+		me.loadjson();
 		if(args.length==0){
 			me.read("");
 			me.cleanup();
@@ -77,6 +81,36 @@ public class SQLiteTest
 	createTables();
 	addData();
     }
+
+    public void loadjson(){
+	try{
+	    InputStream is = new FileInputStream("example.json");
+	    JsonParser parser = Json.createParser(is);
+	    String title=null;
+	    while (parser.hasNext()) {
+		JsonParser.Event e = parser.next();
+		if (e == JsonParser.Event.KEY_NAME) {
+		    switch (parser.getString()) {
+		    case "title":
+			parser.next();
+			title=parser.getString();
+			System.out.println("Title:"+title);
+			break;
+		    case "year":
+			parser.next();
+			String year=parser.getString();
+			System.out.println("Adding "+title+" ("+year+")");
+			addMovie(title,year);
+			break;
+		    }
+		}
+	    }
+	    is.close();
+	}catch(Exception e){
+	    e.printStackTrace();
+	}
+    }
+
 
    
    // close connection at end - not necessary if program ends cleanly
