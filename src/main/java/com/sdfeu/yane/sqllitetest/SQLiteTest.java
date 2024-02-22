@@ -94,12 +94,10 @@ public class SQLiteTest
 		    case "title":
 			parser.next();
 			title=parser.getString();
-			System.out.println("Title:"+title);
 			break;
 		    case "year":
 			parser.next();
 			String year=parser.getString();
-			System.out.println("Adding "+title+" ("+year+")");
 			addMovie(title,year);
 			break;
 		    }
